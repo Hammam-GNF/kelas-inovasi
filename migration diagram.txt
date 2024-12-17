@@ -1,0 +1,27 @@
+-- Migrations will appear here as you chat with AI
+
+create table members (
+  id bigint primary key generated always as identity,
+  username text unique not null,
+  email text unique not null,
+  password_hash text not null,
+  is_email_verified boolean default false,
+  created_at timestamp with time zone default now(),
+  updated_at timestamp with time zone default now()
+);
+
+create table password_resets (
+  id bigint primary key generated always as identity,
+  member_id bigint references members (id) on delete cascade,
+  token text unique not null,
+  created_at timestamp with time zone default now(),
+  expires_at timestamp with time zone not null
+);
+
+create table personal_access_tokens (
+  id bigint primary key generated always as identity,
+  member_id bigint references members (id) on delete cascade,
+  token text unique not null,
+  created_at timestamp with time zone default now(),
+  expires_at timestamp with time zone not null
+);
